@@ -4,6 +4,12 @@
   "private": true,
   "homepage": "./",
   "main": "src/electron-starter.js",
+  "build": {
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null
+  },
   "dependencies": {
     "@material-ui/core": "^4.4.3",
     "@material-ui/icons": "^4.4.3",
@@ -29,7 +35,8 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-start": "node src/electron-wait-react",
-    "react-start": "react-scripts start"
+    "react-start": "react-scripts start",
+    "electron-build": "npm run build && cp src/electron-starter.js build/electron.js && electron-builder"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,6 +67,7 @@
     "@types/react-syntax-highlighter": "^11.0.1",
     "@types/uuid": "^3.4.5",
     "electron": "^6.0.7",
+    "electron-builder": "^21.2.0",
     "foreman": "^3.0.1",
     "react-scripts": "3.1.1",
     "tslint": "^5.19.0",

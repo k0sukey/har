@@ -1,0 +1,42 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macOS-latest, windows-latest]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: install
+        run: npm install
+      - name: package
+        run: npm run electron-build
+      - name: artifacts（mac)
+        if: matrix.os == 'macOS-latest'
+        run: |
+          mkdir dist/artifacts
+          cp dist/*.dmg dist/artifacts
+      - name: artifacts（win)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir dist/artifacts
+          cp dist/*.exe dist/artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: ${{ matrix.os }}
+          path: dist/artifacts
