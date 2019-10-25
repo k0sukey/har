@@ -70,7 +70,6 @@
     "electron-builder": "^21.2.0",
     "foreman": "^3.0.1",
     "react-scripts": "3.1.1",
-    "rimraf": "^3.0.0",
     "tslint": "^5.19.0",
     "typescript": "3.6.2"
   }
