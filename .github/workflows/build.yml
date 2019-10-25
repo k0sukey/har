@@ -1,0 +1,32 @@
+name: build
+
+on: [push]
+
+jobs:
+
+  build:
+    needs: test
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macOS-latest, windows-latest]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: install
+        run: npm install
+      - name: package
+        run: npm run electron-build
+      - name: clean
+        run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: ${{ matrix.os }}
+          path: dist
