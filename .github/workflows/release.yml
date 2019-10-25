@@ -26,7 +26,7 @@ jobs:
       - name: package
         run: npm run electron-build
       - name: clean
-        run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
+        run: npx rimraf "dist/!(*.exe|*.dmg)"
       - name: upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
