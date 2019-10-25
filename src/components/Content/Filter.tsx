@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   createStyles,
   Theme,
@@ -11,6 +11,7 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 export type filterType = 'All' | 'XHR' | 'JS' | 'CSS' | 'Img' | 'Doc' | 'Other';
 
 type Props = {
+  filter: filterType;
   onFilter: (filter: filterType) => void;
 };
 
@@ -47,7 +48,6 @@ const StyledToggleButtonGroup = withStyles(theme => ({
 
 const Filter: React.FC<Props> = props => {
   const classes = useStyles();
-  const [filter, setFilter] = useState<filterType>('All');
 
   const handleFilter = (
     event: React.MouseEvent<HTMLElement>,
@@ -57,7 +57,6 @@ const Filter: React.FC<Props> = props => {
       return;
     }
 
-    setFilter(newFilter);
     props.onFilter(newFilter);
   };
 
@@ -65,7 +64,7 @@ const Filter: React.FC<Props> = props => {
     <div className={classes.container}>
       <StyledToggleButtonGroup
         exclusive
-        value={filter}
+        value={props.filter}
         size="small"
         onChange={handleFilter}
       >

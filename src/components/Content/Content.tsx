@@ -46,7 +46,7 @@ const Content: React.FC<Props> = props => {
   return (
     <main className={classes.container}>
       <AppBar position="sticky">
-        <Filter onFilter={handleFilter} />
+        <Filter filter={filter} onFilter={handleFilter} />
       </AppBar>
       <Request har={har} filter={filter} />
     </main>
