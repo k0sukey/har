@@ -5,6 +5,9 @@
   "homepage": "./",
   "main": "src/electron-starter.js",
   "build": {
+    "directories": {
+      "buildResources": "resources"
+    },
     "publish": null
   },
   "dependencies": {
