@@ -25,17 +25,25 @@ jobs:
         run: npm install
       - name: package
         run: npm run electron-build
-      - name: clean
-        run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
-      - name: upload artifact
+      - name: artifacts（mac)
+        if: matrix.os == 'macOS-latest'
+        run: |
+          mkdir dist/artifacts
+          cp dist/*.dmg dist/artifacts
+      - name: artifacts（win)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir dist/artifacts
+          cp dist/*.exe dist/artifacts
+      - name: upload artifacts
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ${{ matrix.os }}
-          path: dist
+          path: dist/artifacts
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          files: "dist/**"
+          files: "dist/artifacts/**"
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
