@@ -14,16 +14,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v1
-      - name: use Node.js 10.x
+      - name: use Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: 10.x
+          node-version: 12.x
       - name: install
         run: npm install
       - name: package
         run: npm run electron-build
       - name: clean
-        run: npx rimraf "dist/!(*.exe|*.dmg)"
+        run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
