@@ -17,6 +17,7 @@ import pink from '@material-ui/core/colors/pink';
 import clsx from 'clsx';
 import { Har, Entry } from 'har-format';
 import prettyBytes from 'pretty-bytes';
+import Status from 'statuses';
 
 import Detail from '../Detail/Detail';
 import { filterType } from './Filter';
@@ -197,6 +198,14 @@ const StyledTableRow = withStyles((theme: Theme) =>
   }),
 )(TableRow);
 
+const StyledTooltip = withStyles((theme: Theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.black,
+    color: 'rgba(255, 255, 255, 0.87)',
+    fontSize: 13,
+  },
+}))(Tooltip);
+
 const Request: React.FC<Props> = props => {
   const classes = useStyles();
   const [rows, setRows] = useState<Row[]>([]);
@@ -267,7 +276,7 @@ const Request: React.FC<Props> = props => {
                 selected={index === selectedKey}
                 onClick={() => showDetail(index, row.entry)}
               >
-                <Tooltip title={row.url} placement="bottom-start">
+                <StyledTooltip title={row.url} placement="top-start">
                   <TableCell
                     className={clsx(
                       classes.nameBody,
@@ -285,13 +294,15 @@ const Request: React.FC<Props> = props => {
                   >
                     <small>{row.name}</small>
                   </TableCell>
-                </Tooltip>
+                </StyledTooltip>
                 <TableCell className={classes.methodBody}>
                   <small>{row.method}</small>
                 </TableCell>
-                <TableCell className={classes.statusBody}>
-                  <small>{row.status}</small>
-                </TableCell>
+                <StyledTooltip title={Status[row.status]} placement="top-start">
+                  <TableCell className={classes.statusBody}>
+                    <small>{row.status}</small>
+                  </TableCell>
+                </StyledTooltip>
                 <TableCell className={classes.typeBody}>
                   <small>{row.type}</small>
                 </TableCell>
