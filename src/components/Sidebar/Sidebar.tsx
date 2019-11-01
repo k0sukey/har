@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import {
+  createStyles,
+  Theme,
+  makeStyles,
+  withStyles,
+} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -62,6 +67,14 @@ const pathToName = (v: string): string => {
   const parsed = v.split('/');
   return parsed[parsed.length - 1];
 };
+
+const StyledTooltip = withStyles((theme: Theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.black,
+    color: 'rgba(255, 255, 255, 0.87)',
+    fontSize: 13,
+  },
+}))(Tooltip);
 
 const Sidebar: React.FC<Props> = props => {
   const classes = useStyles();
@@ -143,14 +156,14 @@ const Sidebar: React.FC<Props> = props => {
         anchor="left"
       >
         <List disablePadding style={{ paddingTop: '40px' }}>
-          <Tooltip title="Open a new HTTP Archive file" placement="right">
+          <StyledTooltip title="Open a new HTTP Archive file" placement="right">
             <ListItem button key="Open HAR file" onClick={openFile}>
               <ListItemIcon className={classes.listIcon}>
                 <OpenInBrowserIcon />
               </ListItemIcon>
               <ListItemText primary="Open HAR file" />
             </ListItem>
-          </Tooltip>
+          </StyledTooltip>
         </List>
         <List disablePadding>
           <ListItem key="History">
@@ -158,20 +171,20 @@ const Sidebar: React.FC<Props> = props => {
               <HistoryIcon />
             </ListItemIcon>
             <ListItemText primary="History" />
-            <Tooltip title="Clear HAR histories" placement="right">
+            <StyledTooltip title="Clear HAR histories" placement="right">
               <ListItemSecondaryAction>
                 <IconButton edge="end" size="small" onClick={deleteHistory}>
                   <DeleteIcon fontSize="small" />
                 </IconButton>
               </ListItemSecondaryAction>
-            </Tooltip>
+            </StyledTooltip>
           </ListItem>
         </List>
         <List component="div" disablePadding dense>
           {histories
             .sort((a, b) => b.time - a.time)
             .map((history, index) => (
-              <Tooltip
+              <StyledTooltip
                 key={`histories-${index}`}
                 title={`${pathToName(history.path)} Press ⌘${index} to switch`}
                 placement="right"
@@ -188,7 +201,7 @@ const Sidebar: React.FC<Props> = props => {
                     primary={pathToName(history.path)}
                   />
                 </ListItem>
-              </Tooltip>
+              </StyledTooltip>
             ))}
         </List>
       </Drawer>
