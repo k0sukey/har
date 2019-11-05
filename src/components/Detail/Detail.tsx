@@ -30,9 +30,12 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: '-2px 0 10px rgba(0,0,0,0.2)',
       zIndex: 2,
     },
-    tabs: {
+    wrapper: {
       display: 'flex',
     },
+    tabs: {
+      width: '100%',
+    }
   }),
 );
 
@@ -81,7 +84,7 @@ const Detail: React.FC<Props> = props => {
 
   return props.show && props.entry !== null ? (
     <div ref={containerRef} className={classes.container}>
-      <div className={classes.tabs}>
+      <div className={classes.wrapper}>
         <Button onClick={props.onHide}>
           <CloseRoundedIcon />
         </Button>
@@ -91,6 +94,7 @@ const Detail: React.FC<Props> = props => {
           indicatorColor="secondary"
           textColor="secondary"
           variant="fullWidth"
+          className={classes.tabs}
         >
           <Tab label="Headers" />
           <Tab label="Preview" />
