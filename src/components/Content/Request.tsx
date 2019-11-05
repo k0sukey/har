@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 40,
       right: 0,
       width: `calc(100% - ${drawerWidth}px)`,
-      height: 'calc(100% - 48px)',
+      height: 'calc(100% - 40px)',
       overflow: 'scroll',
     },
     row: {
@@ -245,10 +245,10 @@ const Request: React.FC<Props> = props => {
   };
 
   const isOption = (method: string): boolean => method === 'OPTIONS';
-  const is0 = (status: number): boolean => /^0$/.test(status.toString());
-  const is100 = (status: number): boolean => /^1.+/.test(status.toString());
-  const is400 = (status: number): boolean => /^4.+/.test(status.toString());
-  const is500 = (status: number): boolean => /^5.+/.test(status.toString());
+  const is0 = (status: number): boolean => status === 0;
+  const is100 = (status: number): boolean => 100 <= status && status < 200;
+  const is400 = (status: number): boolean => 400 <= status && status < 500;
+  const is500 = (status: number): boolean => 500 <= status && status < 600;
 
   return (
     <div className={classes.container}>
