@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import { Entry } from 'har-format';
 import mousetrap from 'mousetrap';
+import clsx from 'clsx';
 
 import { drawerWidth } from '../Sidebar/Sidebar';
 import Headers from './Headers';
@@ -16,6 +17,7 @@ type Props = {
   show: boolean | false;
   entry: Entry | null;
   onHide: () => void;
+  isCollapsed: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,12 +32,26 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: '-2px 0 10px rgba(0,0,0,0.2)',
       zIndex: 2,
     },
+    containerOpen: {
+      width: `calc(100% - ${drawerWidth + 60}px)`,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    containerClose: {
+      width: `calc(100% - ${theme.spacing(7) + 1 + 60}px)`,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
     wrapper: {
       display: 'flex',
     },
     tabs: {
       width: '100%',
-    }
+    },
   }),
 );
 
@@ -83,7 +99,13 @@ const Detail: React.FC<Props> = props => {
   };
 
   return props.show && props.entry !== null ? (
-    <div ref={containerRef} className={classes.container}>
+    <div
+      ref={containerRef}
+      className={clsx(classes.container, {
+        [classes.containerOpen]: !props.isCollapsed,
+        [classes.containerClose]: props.isCollapsed,
+      })}
+    >
       <div className={classes.wrapper}>
         <Button onClick={props.onHide}>
           <CloseRoundedIcon />

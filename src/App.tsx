@@ -38,10 +38,11 @@ const useStyles = makeStyles(() =>
 );
 
 const App: React.FC = () => {
+  const classes = useStyles();
   const [path, setPath] = useState<string | null>(null);
   const [dropPaths, setDropPaths] = useState<string[]>([]);
   const [showDrop, setShowDrop] = useState<boolean>(false);
-  const classes = useStyles();
+  const [collapse, setCollapse] = useState<boolean>(false);
 
   const handleDragEnter = () => {
     setShowDrop(true);
@@ -72,8 +73,12 @@ const App: React.FC = () => {
         {({ getRootProps }) => (
           <div className={classes.container} {...getRootProps()}>
             <CssBaseline />
-            <Sidebar dropPaths={dropPaths} onPath={v => setPath(v)} />
-            <Content path={path} />
+            <Sidebar
+              dropPaths={dropPaths}
+              onPath={v => setPath(v)}
+              isCollapsed={collapse}
+            />
+            <Content path={path} onCollapse={v => setCollapse(v)} />
             {showDrop && <Drop />}
           </div>
         )}
