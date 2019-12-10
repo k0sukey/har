@@ -12,6 +12,7 @@ const { remote } = window.require('electron');
 
 type Props = {
   path: string | null;
+  onCollapse: (isCollapsed: boolean) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,6 +29,7 @@ const Content: React.FC<Props> = props => {
   const classes = useStyles();
   const [har, setHar] = useState<Har | null>(null);
   const [filter, setFilter] = useState<filterType>('All');
+  const [collapse, setCollapse] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -43,12 +45,22 @@ const Content: React.FC<Props> = props => {
     setFilter(filter);
   };
 
+  const handleCollapse = (isCollapsed: boolean) => {
+    setCollapse(isCollapsed);
+    props.onCollapse(isCollapsed);
+  };
+
   return (
     <main className={classes.container}>
       <AppBar position="sticky">
-        <Filter filter={filter} onFilter={handleFilter} />
+        <Filter
+          filter={filter}
+          onFilter={handleFilter}
+          collapse={collapse}
+          onCollapse={handleCollapse}
+        />
       </AppBar>
-      <Request har={har} filter={filter} />
+      <Request har={har} filter={filter} isCollapsed={collapse} />
     </main>
   );
 };

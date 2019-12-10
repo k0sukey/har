@@ -26,6 +26,7 @@ import { drawerWidth } from '../Sidebar/Sidebar';
 type Props = {
   har: Har | null;
   filter: filterType | 'All';
+  isCollapsed: boolean;
 };
 
 type mimeType = 'XHR' | 'JS' | 'CSS' | 'Img' | 'Doc' | 'Other';
@@ -51,6 +52,20 @@ const useStyles = makeStyles((theme: Theme) =>
       width: `calc(100% - ${drawerWidth}px)`,
       height: 'calc(100% - 40px)',
       overflow: 'scroll',
+    },
+    containerOpen: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    containerClose: {
+      width: `calc(100% - ${theme.spacing(7) + 1}px)`,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
     },
     row: {
       backgroundColor: theme.palette.background.paper,
@@ -251,7 +266,12 @@ const Request: React.FC<Props> = props => {
   const is500 = (status: number): boolean => 500 <= status && status < 600;
 
   return (
-    <div className={classes.container}>
+    <div
+      className={clsx(classes.container, {
+        [classes.containerOpen]: !props.isCollapsed,
+        [classes.containerClose]: props.isCollapsed,
+      })}
+    >
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
@@ -316,7 +336,12 @@ const Request: React.FC<Props> = props => {
             ))}
         </TableBody>
       </Table>
-      <Detail show={selectedKey !== null} entry={entry} onHide={hideDetail} />
+      <Detail
+        show={selectedKey !== null}
+        entry={entry}
+        onHide={hideDetail}
+        isCollapsed={props.isCollapsed}
+      />
     </div>
   );
 };

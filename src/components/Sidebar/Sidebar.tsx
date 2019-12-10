@@ -18,12 +18,14 @@ import HistoryIcon from '@material-ui/icons/History';
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import Mousetrap from 'mousetrap';
 import * as uuid from 'uuid';
+import clsx from 'clsx';
 
 const { remote } = window.require('electron');
 
 type Props = {
   onPath: (path: string) => void;
   dropPaths: string[];
+  isCollapsed: boolean;
 };
 
 interface History {
@@ -42,9 +44,24 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
       flexShrink: 0,
       backgroundColor: theme.palette.background.default,
+      whiteSpace: 'nowrap',
+    },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerClose: {
+      width: theme.spacing(7) + 1,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: 'hidden',
     },
     drawerPaper: {
-      width: drawerWidth,
       height: '100%',
     },
     listIcon: {
@@ -59,6 +76,13 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 2,
       paddingBottom: 2,
       paddingLeft: theme.spacing(3),
+    },
+    toolbar: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      padding: theme.spacing(0, 1),
+      minHeight: '60px',
     },
   }),
 );
@@ -147,13 +171,21 @@ const Sidebar: React.FC<Props> = props => {
   });
 
   return (
-    <nav className={classes.drawer}>
+    <nav>
       <Drawer
         variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: !props.isCollapsed,
+          [classes.drawerClose]: props.isCollapsed,
+        })}
         classes={{
-          paper: classes.drawerPaper,
+          paper: clsx(classes.drawerPaper, {
+            [classes.drawerOpen]: !props.isCollapsed,
+            [classes.drawerClose]: props.isCollapsed,
+          }),
         }}
         anchor="left"
+        open={!props.isCollapsed}
       >
         <List disablePadding style={{ paddingTop: '40px' }}>
           <StyledTooltip title="Open a new HTTP Archive file" placement="right">
@@ -171,7 +203,11 @@ const Sidebar: React.FC<Props> = props => {
               <HistoryIcon />
             </ListItemIcon>
             <ListItemText primary="History" />
-            <StyledTooltip title="Clear HAR histories" placement="right">
+            <StyledTooltip
+              title="Clear HAR histories"
+              placement="right"
+              style={{ display: props.isCollapsed ? 'none' : 'block' }}
+            >
               <ListItemSecondaryAction>
                 <IconButton edge="end" size="small" onClick={deleteHistory}>
                   <DeleteIcon fontSize="small" />
